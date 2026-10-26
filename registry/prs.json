@@ -4,7 +4,7 @@
   "roadmapVersion": 3,
   "planVerified": true,
   "plannedPrCount": 3,
-  "observedAt": "2026-10-26T19:39:03Z",
+  "observedAt": "2026-10-26T19:48:06Z",
   "units": [
     {
       "id": "ESP-001",
@@ -100,7 +100,15 @@
       "implementationStatus": "implemented_foundation",
       "validation": {
         "local": "passed: Node 24.22.1; strict typecheck; 58 tests (19 facade); ESM/declaration build; compiled facade export smoke; canonical registry",
-        "ci": "pending",
+        "ci": {
+          "status": "passed",
+          "commitSha": "070f2dd1f2287d04b0e2e29cb35b96b423db21fc",
+          "workflowRunIds": [
+            40389715695,
+            40389725032
+          ],
+          "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/actions/runs/40389725032"
+        },
         "live": "not_performed"
       }
     }
@@ -137,10 +145,10 @@
       "state": "open",
       "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/3",
       "createdAt": "2026-10-26T19:32:00Z",
-      "updatedAt": "2026-10-26T19:39:03Z",
+      "updatedAt": "2026-10-26T19:48:06Z",
       "mergedAt": null,
       "closedAt": null,
-      "draft": true
+      "draft": false
     }
   ]
 }
