@@ -38,3 +38,7 @@ The adapter stores generic scoped metadata snapshots and immutable revisions, ch
 Recovery provenance: `accountability-machine/packages/runtime/src/database.ts` and `accountability-machine/migrations/001_foundation.sql`; originals are unchanged. The first WIP code checkpoint was pushed in [ce22563](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/commit/ce22563b6cd3066587bbee066942672dda7f1a4c) before hardening and tests. Evidence-prefixed tables/role and local contracts imports isolate the recovered generic persistence layer from application storage.
 
 Next coordinated work: Identity-gated service operations, production PostgreSQL acceptance (including independent-session locking and runtime login provisioning), object/metadata reconciliation, durable audit anchoring, retention/key lifecycle and scanner/worker integration.
+
+## ESP-003 facade WIP checkpoint
+
+Initial authenticated application facade composes the immutable Evidence domain, scoped Database and encrypted object store. Identity SDK source is pinned to upstream main; scope/actor come from authenticate, never command fields. Acquisition metadata and the scan outbox entry share a transaction. This checkpoint precedes tests: durable scan attempt handling, trusted worker/scanner ports, orphan reconciliation, final validation and compiled package exports are pending. Blob writes may outlive SQL rollback; this WIP does not delete blobs. No live service/scanner acceptance is claimed.
