@@ -174,12 +174,12 @@ export class UnitOfWork {
       invariant(job.topic === topic && digest(job.payload) === fingerprint && job.max_attempts === maxAttempts, 'outbox_conflict', 'Job ID already used for a different message'); return id;
     });
   }
-  claim(worker: string, leaseMs = 30000): Promise<LeasedJob | null> {
+  claim(worker: string, leaseMs = 30000, topic?: string): Promise<LeasedJob | null> {
     return this.#run(async () => {
-      nonempty(worker, 'worker', 128); invariant(Number.isSafeInteger(leaseMs) && leaseMs >= 1000 && leaseMs <= 300000, 'invalid_lease', 'Lease must be 1-300 seconds');
+      nonempty(worker, 'worker', 128); if (topic !== undefined) nonempty(topic, 'topic', 128); invariant(Number.isSafeInteger(leaseMs) && leaseMs >= 1000 && leaseMs <= 300000, 'invalid_lease', 'Lease must be 1-300 seconds');
       await this.#lock();
-      await this.#q.query("UPDATE public.evidence_outbox SET state='dead',lease_until=NULL,lease_owner=NULL,last_error='attempts_exhausted' WHERE tenant_id=$1 AND project_id=$2 AND attempts>=max_attempts AND (state='pending' OR (state='leased' AND lease_until<=$3))", [...this.#scope(), this.#ctx.now]);
-      const result = await this.#q.query<JobRow>(`WITH next AS (SELECT id FROM public.evidence_outbox WHERE tenant_id=$1 AND project_id=$2 AND attempts<max_attempts AND ((state='pending' AND available_at<=$3) OR (state='leased' AND lease_until<=$3)) ORDER BY available_at,id FOR UPDATE SKIP LOCKED LIMIT 1) UPDATE public.evidence_outbox SET state='leased',generation=generation+1,attempts=attempts+1,lease_owner=$4,lease_until=$5 WHERE tenant_id=$1 AND project_id=$2 AND id IN(SELECT id FROM next) RETURNING *`, [...this.#scope(), this.#ctx.now, worker, new Date(validTime(this.#ctx.now) + leaseMs).toISOString()]);
+      await this.#q.query("UPDATE public.evidence_outbox SET state='dead',lease_until=NULL,lease_owner=NULL,last_error='attempts_exhausted' WHERE tenant_id=$1 AND project_id=$2 AND attempts>=max_attempts AND ($4::text IS NULL OR topic=$4) AND (state='pending' OR (state='leased' AND lease_until<=$3))", [...this.#scope(), this.#ctx.now, topic ?? null]);
+      const result = await this.#q.query<JobRow>(`WITH next AS (SELECT id FROM public.evidence_outbox WHERE tenant_id=$1 AND project_id=$2 AND attempts<max_attempts AND ($6::text IS NULL OR topic=$6) AND ((state='pending' AND available_at<=$3) OR (state='leased' AND lease_until<=$3)) ORDER BY available_at,id FOR UPDATE SKIP LOCKED LIMIT 1) UPDATE public.evidence_outbox SET state='leased',generation=generation+1,attempts=attempts+1,lease_owner=$4,lease_until=$5 WHERE tenant_id=$1 AND project_id=$2 AND id IN(SELECT id FROM next) RETURNING *`, [...this.#scope(), this.#ctx.now, worker, new Date(validTime(this.#ctx.now) + leaseMs).toISOString(), topic ?? null]);
       const job = result.rows[0]; return job ? { tenantId: this.#ctx.tenantId, projectId: this.#ctx.projectId, id: job.id, topic: job.topic, payload: job.payload, generation: job.generation, attempts: job.attempts, leaseOwner: worker } : null;
     });
   }
