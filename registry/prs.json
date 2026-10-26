@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "repository": "neophilism/Evidence-Storage-and-Provenance-Engine",
+  "roadmapVersion": 1,
+  "planVerified": true,
+  "plannedPrCount": 1,
+  "observedAt": "2026-10-26T18:55:55Z",
+  "units": [
+    {
+      "id": "ESP-001",
+      "title": "Evidence storage and provenance foundation",
+      "origin": "original",
+      "prs": [
+        1
+      ],
+      "contributingPrs": [],
+      "dependsOn": [],
+      "externalDependencies": [],
+      "externalPrerequisites": [],
+      "scope": [
+        "Exact-byte acquisition and immutable revisions",
+        "Quarantine and scan attempts",
+        "Selectors and source independence",
+        "Encrypted local object storage"
+      ],
+      "acceptanceCriteria": "Synthetic automated tests verify boundary behavior. Local, CI and live acceptance are recorded separately.",
+      "implementationStatus": "implemented_foundation",
+      "validation": {
+        "local": "passed: Node 24.22.1; strict typecheck, 21 tests, build, registry validation",
+        "ci": "pending",
+        "live": "not_performed"
+      }
+    }
+  ],
+  "pullRequests": [
+    {
+      "id": 5022987487,
+      "number": 1,
+      "title": "Add standalone evidence storage and provenance foundation",
+      "state": "open",
+      "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/1",
+      "createdAt": "2026-10-26T18:55:55Z",
+      "updatedAt": "2026-10-26T18:55:55Z",
+      "mergedAt": null,
+      "closedAt": null,
+      "draft": true
+    }
+  ]
+}

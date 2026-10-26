@@ -9,6 +9,8 @@ export class PrivateObjectStore {
  constructor(root:string,key:Uint8Array,keyVersion:string){invariant(key.length===32,'invalid_key','AES256 requires32bytes');this.root=resolve(root);this.key=new Uint8Array(key);this.keyVersion=keyVersion;}
  async put(scope:Scope,bytes:Uint8Array):Promise<ObjectReceipt>{
  invariant(bytes.length<=25*1024*1024,'object_too_large','Maximum object size is25MiB');
+ // Snapshot caller-owned values before the first await so receipts bind the encrypted bytes.
+ scope={tenantId:scope.tenantId,projectId:scope.projectId};bytes=new Uint8Array(bytes);
  const scopeHash=digest(scope),plaintextHash=hashBytes(bytes),key=`${scopeHash}/${plaintextHash}`;
  const dir=join(this.root,scopeHash);await mkdir(dir,{recursive:true,mode:0o700});invariant(!(await lstat(dir)).isSymbolicLink(),'unsafe_storage','Symlinked object directories forbidden');
  const iv=randomBytes(12),cipher=createCipheriv('aes-256-gcm',this.key,iv);cipher.setAAD(Buffer.from(canonical({scope,keyVersion:this.keyVersion,plaintextHash})));
@@ -21,8 +23,10 @@ export class PrivateObjectStore {
  return {key,plaintextHash,size:bytes.length,keyVersion:this.keyVersion};
  }
  async get(scope:Scope,receipt:ObjectReceipt):Promise<Uint8Array>{
+ scope={tenantId:scope.tenantId,projectId:scope.projectId};receipt={...receipt};
  invariant(/^[a-f0-9]{64}\/[a-f0-9]{64}$/.test(receipt.key)&&receipt.key===`${digest(scope)}/${receipt.plaintextHash}`,'object_scope_denied','Invalid scoped object reference');
  invariant(receipt.keyVersion===this.keyVersion,'key_unavailable','Object key version unavailable');
+ const dir=join(this.root,digest(scope));invariant(!(await lstat(dir)).isSymbolicLink(),'unsafe_storage','Symlinked object directories forbidden');
  const path=join(this.root,receipt.key);invariant(!(await lstat(path)).isSymbolicLink(),'unsafe_storage','Symlinked objects forbidden');
  const envelope=JSON.parse(await readFile(path,'utf8')) as {v:number;keyVersion:string;iv:string;tag:string;data:string};
  invariant(envelope.v===1&&envelope.keyVersion===this.keyVersion,'invalid_object','Unsupported encrypted envelope');

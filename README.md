@@ -1,11 +1,25 @@
 # Evidence Storage and Provenance Engine
 
-Standalone Node 24 TypeScript dependency library. Recovered foundation includes exact-byte acquisition, immutable revisions, quarantine/scans, selectors, source-family analysis, handling chains, redaction derivatives and encrypted local objects. No application implementation or research data.
+Standalone Node 24 TypeScript dependency library for exact-byte acquisition, immutable revisions, quarantine/scans, revision-bound selectors, source-family analysis, handling chains, redaction derivatives and encrypted local objects. Synthetic fixtures only.
+
+```sh
+npm ci
+npm run check
+```
+
+Import evidence functions from `@accountability/evidence`, local encrypted storage from `@accountability/evidence/objects`, and shared types from `@accountability/evidence/contracts`. `npm run build` produces ESM and declarations in `dist/`.
 
 ## Checkpoint
 
-Implementation: recovered foundation, not yet fully reviewed. Local validation: pending. CI: pending. Live acceptance: not performed. Initial code checkpoint precedes tests and packaging; do not treat this as a production release.
+- Implementation: recovered foundation with two storage fixes (snapshot caller bytes before async work; reject symlinked tenant directories on read).
+- Local validation: Node 24.22.1; strict typecheck, 21 automated tests, ESM/declaration build, registry validation and byte-identical contract comparison passed.
+- CI validation: workflow added; pending remote observation for this checkpoint.
+- Live acceptance: not performed. No deployed service, real scanner, durable metadata repository or identity integration is claimed.
 
-Shared contracts are vendored byte-identically from `engines/identity/src/contracts.ts`, provenance: `neophilism/Identity-Authorization-and-Policy-Engine` commit `2ecac5a7ec01e4470774ef545060b99dba38014d`. Recovery sources: `accountability-machine/packages/evidence/src/index.ts` and `accountability-machine/packages/runtime/src/objects.ts`; only relative contract imports were rewritten in this checkpoint. Originals were not modified.
+One bounded foundation PR: [#1](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/1). The initial recovered code was pushed before packaging/tests in [28276f0](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/commit/28276f04feddcf3579759a63c3df8ff526c759d4). The canonical machine-readable plan is [registry/prs.json](registry/prs.json); it describes only this authorized foundation unit.
 
-Next: standalone strict TypeScript package/lock/CI, canonical PR registry, and synthetic boundary tests. Durable metadata transactions, identity integration and live service acceptance remain follow-up work.
+## Provenance
+
+`src/contracts.ts` is vendored byte-identically from `engines/identity/src/contracts.ts`, `neophilism/Identity-Authorization-and-Policy-Engine` commit `2ecac5a7ec01e4470774ef545060b99dba38014d`. Recovery sources were `accountability-machine/packages/evidence/src/index.ts` and `accountability-machine/packages/runtime/src/objects.ts`; their relative contract imports were rewritten. Original recovery files were not modified. The registry parser and pinned toolchain follow the local Identity foundation example; the parser was copied unchanged.
+
+See [architecture and limits](docs/ARCHITECTURE.md) for consumer responsibilities and remaining integration work.
