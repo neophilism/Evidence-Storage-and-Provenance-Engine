@@ -12,11 +12,11 @@ Import evidence functions from `@accountability/evidence`, local encrypted stora
 ## Checkpoint
 
 - Implementation: recovered foundation with two storage fixes (snapshot caller bytes before async work; reject symlinked tenant directories on read).
-- Local validation: Node 24.22.1; strict typecheck, 21 automated tests, ESM/declaration build, registry validation and byte-identical contract comparison passed.
-- CI validation: workflow added; pending remote observation for this checkpoint.
+- Local validation: Node 24.22.1; strict typecheck, 21 automated tests, ESM/declaration build, registry validation and byte-identical contract comparison (including the pinned remote Identity commit) passed.
+- CI validation: push and PR checks passed for implementation commit `200012f6aaadb0973504388bb79ab30a89fbb2b8`, including clean `npm ci` and `npm run check` ([run](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/actions/runs/40382672960)). Later documentation-only heads have separate runs on GitHub.
 - Live acceptance: not performed. No deployed service, real scanner, durable metadata repository or identity integration is claimed.
 
-One bounded foundation PR: [#1](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/1). The initial recovered code was pushed before packaging/tests in [28276f0](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/commit/28276f04feddcf3579759a63c3df8ff526c759d4). The canonical machine-readable plan is [registry/prs.json](registry/prs.json); it describes only this authorized foundation unit.
+Ready for review, one bounded foundation PR: [#1](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/1). The initial recovered code was pushed before packaging/tests in [28276f0](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/commit/28276f04feddcf3579759a63c3df8ff526c759d4). The canonical machine-readable plan is [registry/prs.json](registry/prs.json); it describes only this authorized foundation unit.
 
 ## Provenance
 
