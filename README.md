@@ -23,3 +23,9 @@ Ready for review, one bounded foundation PR: [#1](https://github.com/neophilism/
 `src/contracts.ts` is vendored byte-identically from `engines/identity/src/contracts.ts`, `neophilism/Identity-Authorization-and-Policy-Engine` commit `2ecac5a7ec01e4470774ef545060b99dba38014d`. Recovery sources were `accountability-machine/packages/evidence/src/index.ts` and `accountability-machine/packages/runtime/src/objects.ts`; their relative contract imports were rewritten. Original recovery files were not modified. The registry parser and pinned toolchain follow the local Identity foundation example; the parser was copied unchanged.
 
 See [architecture and limits](docs/ARCHITECTURE.md) for consumer responsibilities and remaining integration work.
+
+## Durable persistence WIP checkpoint
+
+Recovered generic metadata/revision/audit/idempotency/outbox adapter and migration are now copied into this engine with Evidence-specific table/role names and local contracts imports. This is a code checkpoint before validation, not a supported production database interface yet. Source review and tests are pending, especially runtime login versus migration ownership, public raw SQL access, transaction scope mutation, immutable storage enforcement, optimistic revisions, atomic rollback/idempotency and expired final-attempt leases. No live infrastructure or service acceptance is claimed.
+
+Recovery provenance: `accountability-machine/packages/runtime/src/database.ts` and `accountability-machine/migrations/001_foundation.sql`; originals are unchanged. This work follows foundation PR #1 and remains a separate bounded persistence PR.
