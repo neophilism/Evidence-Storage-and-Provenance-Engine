@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "repository": "neophilism/Evidence-Storage-and-Provenance-Engine",
-  "roadmapVersion": 1,
+  "roadmapVersion": 2,
   "planVerified": true,
-  "plannedPrCount": 1,
-  "observedAt": "2026-10-26T19:00:02Z",
+  "plannedPrCount": 2,
+  "observedAt": "2026-10-26T19:07:32Z",
   "units": [
     {
       "id": "ESP-001",
@@ -38,6 +38,33 @@
         },
         "live": "not_performed"
       }
+    },
+    {
+      "id": "ESP-002",
+      "title": "Durable scoped evidence persistence",
+      "origin": "addition",
+      "prs": [
+        2
+      ],
+      "contributingPrs": [],
+      "dependsOn": [
+        "ESP-001"
+      ],
+      "externalDependencies": [],
+      "externalPrerequisites": [],
+      "scope": [
+        "Scoped metadata and optimistic immutable revisions",
+        "Append-only audit and atomic idempotency/outbox",
+        "Generation-fenced leases and terminal expiry",
+        "Runtime login privilege separation and SQL source review"
+      ],
+      "acceptanceCriteria": "Apply actual migration to PGlite and verify RLS, immutability, optimistic revisions, rollback/idempotency, scoped generation fences and restart persistence. Production/live service acceptance remains separate.",
+      "implementationStatus": "implemented_foundation",
+      "validation": {
+        "local": "passed: strict typecheck; 39 tests (18 persistence); build; registry",
+        "ci": "pending",
+        "live": "not_performed"
+      }
     }
   ],
   "pullRequests": [
@@ -45,13 +72,25 @@
       "id": 5022987487,
       "number": 1,
       "title": "ESP-001: Add standalone evidence storage and provenance foundation",
-      "state": "open",
+      "state": "closed",
       "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/1",
       "createdAt": "2026-10-26T18:55:55Z",
-      "updatedAt": "2026-10-26T19:00:02Z",
+      "updatedAt": "2026-10-26T19:07:32Z",
+      "mergedAt": "2026-10-26T19:07:32Z",
+      "closedAt": "2026-10-26T19:07:32Z",
+      "draft": false
+    },
+    {
+      "id": 5023092827,
+      "number": 2,
+      "title": "ESP-002: Add durable scoped evidence persistence",
+      "state": "open",
+      "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/2",
+      "createdAt": "2026-10-26T19:04:33Z",
+      "updatedAt": "2026-10-26T19:04:33Z",
       "mergedAt": null,
       "closedAt": null,
-      "draft": false
+      "draft": true
     }
   ]
 }

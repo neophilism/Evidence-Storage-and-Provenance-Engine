@@ -15,6 +15,10 @@
     "./objects": {
       "types": "./dist/objects.d.ts",
       "default": "./dist/objects.js"
+    },
+    "./database": {
+      "types": "./dist/database.d.ts",
+      "default": "./dist/database.js"
     }
   },
   "engines": {
@@ -28,12 +32,18 @@
     "prepare": "npm run build"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.12",
     "@types/node": "26.6.5",
+    "@types/pg": "8.23.1",
     "typescript": "7.0.2"
   },
   "files": [
     "dist",
     "README.md",
-    "docs"
-  ]
+    "docs",
+    "migrations"
+  ],
+  "dependencies": {
+    "pg": "8.23.1"
+  }
 }

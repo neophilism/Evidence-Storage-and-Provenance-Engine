@@ -24,8 +24,17 @@ Ready for review, one bounded foundation PR: [#1](https://github.com/neophilism/
 
 See [architecture and limits](docs/ARCHITECTURE.md) for consumer responsibilities and remaining integration work.
 
-## Durable persistence WIP checkpoint
+## Durable scoped persistence checkpoint
 
-Recovered generic metadata/revision/audit/idempotency/outbox adapter and migration are now copied into this engine with Evidence-specific table/role names and local contracts imports. This is a code checkpoint before validation, not a supported production database interface yet. Source review and tests are pending, especially runtime login versus migration ownership, public raw SQL access, transaction scope mutation, immutable storage enforcement, optimistic revisions, atomic rollback/idempotency and expired final-attempt leases. No live infrastructure or service acceptance is claimed.
+Import `postgresDatabase`, `scoped` and `verifyAudit` from `@accountability/evidence/database`. The package includes `migrations/001_foundation.sql`; apply it once as a separate migration owner to a dedicated Evidence database. Connect the application through a restricted LOGIN granted the NOLOGIN `evidence_runtime` role. Privileged/owner connections are rejected before SET ROLE. See [SQL review and deployment contract](docs/SQL_REVIEW.md).
 
-Recovery provenance: `accountability-machine/packages/runtime/src/database.ts` and `accountability-machine/migrations/001_foundation.sql`; originals are unchanged. This work follows foundation PR #1 and remains a separate bounded persistence PR.
+The adapter stores generic scoped metadata snapshots and immutable revisions, chained audits, actor/input-bound idempotency results and generation-fenced outbox jobs in one PostgreSQL transaction. It uses project-row locks and expected revisions, keeps raw SQL private, captures caller context/JSON before awaits, and rejects caught failures or unawaited operations at commit. Outbox completion/failure checks scope, owner, generation and lease deadline; expired final-attempt jobs become dead.
+
+- Implementation: durable persistence foundation in [PR #2](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/2), initially pinned to foundation head `24d8440589648783263934216d9fac202ab3480a`.
+- Local validation: strict typecheck, **39 tests** (18 persistence integration tests plus 21 foundation tests), ESM/declaration build and canonical registry validation passed on Node 24.22.1. PGlite applies the actual migration, exercises roles/RLS and persists across a filesystem restart.
+- CI validation: pending remote observation for this checkpoint.
+- Live acceptance: not performed; no external infrastructure was created. PGlite is not proof of production authentication, network pooling or true multi-session locking.
+
+Recovery provenance: `accountability-machine/packages/runtime/src/database.ts` and `accountability-machine/migrations/001_foundation.sql`; originals are unchanged. The first WIP code checkpoint was pushed in [ce22563](https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/commit/ce22563b6cd3066587bbee066942672dda7f1a4c) before hardening and tests. Evidence-prefixed tables/role and local contracts imports isolate the recovered generic persistence layer from application storage.
+
+Next coordinated work: Identity-gated service operations, production PostgreSQL acceptance (including independent-session locking and runtime login provisioning), object/metadata reconciliation, durable audit anchoring, retention/key lifecycle and scanner/worker integration.

@@ -5,4 +5,4 @@ const {document} = parsePrRegistry(body, process.env.GITHUB_REPOSITORY || JSON.p
 for (const unit of document.units) for (const number of unit.prs) {
   if (!document.pullRequests.some(pr => pr.number === number)) throw new Error('Missing observed PR');
 }
-console.log(`Valid PR registry: ${document.repository}, ${document.units.length} approved foundation unit; live acceptance is separate.`);
+console.log(`Valid PR registry: ${document.repository}, ${document.units.length} approved units; live acceptance is separate.`);
