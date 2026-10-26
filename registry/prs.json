@@ -4,7 +4,7 @@
   "roadmapVersion": 2,
   "planVerified": true,
   "plannedPrCount": 2,
-  "observedAt": "2026-10-26T19:07:32Z",
+  "observedAt": "2026-10-26T19:15:03Z",
   "units": [
     {
       "id": "ESP-001",
@@ -61,8 +61,16 @@
       "acceptanceCriteria": "Apply actual migration to PGlite and verify RLS, immutability, optimistic revisions, rollback/idempotency, scoped generation fences and restart persistence. Production/live service acceptance remains separate.",
       "implementationStatus": "implemented_foundation",
       "validation": {
-        "local": "passed: strict typecheck; 39 tests (18 persistence); build; registry",
-        "ci": "pending",
+        "local": "passed: Node 24.22.1; strict typecheck; 39 tests (18 persistence); ESM/declaration build; compiled database ESM smoke; package manifest dry-run; canonical registry",
+        "ci": {
+          "status": "passed",
+          "commitSha": "6464615b423ec95ed0293f6b8b0e2db291ea120b",
+          "workflowRunIds": [
+            40384829619,
+            40384840936
+          ],
+          "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/actions/runs/40384840936"
+        },
         "live": "not_performed"
       }
     }
@@ -87,10 +95,10 @@
       "state": "open",
       "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/2",
       "createdAt": "2026-10-26T19:04:33Z",
-      "updatedAt": "2026-10-26T19:04:33Z",
+      "updatedAt": "2026-10-26T19:15:03Z",
       "mergedAt": null,
       "closedAt": null,
-      "draft": true
+      "draft": false
     }
   ]
 }
