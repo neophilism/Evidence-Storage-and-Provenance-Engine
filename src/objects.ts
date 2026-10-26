@@ -33,4 +33,16 @@ export class PrivateObjectStore {
  const decipher=createDecipheriv('aes-256-gcm',this.key,Buffer.from(envelope.iv,'base64'));decipher.setAAD(Buffer.from(canonical({scope,keyVersion:this.keyVersion,plaintextHash:receipt.plaintextHash})));decipher.setAuthTag(Buffer.from(envelope.tag,'base64'));
  const bytes=Buffer.concat([decipher.update(Buffer.from(envelope.data,'base64')),decipher.final()]);invariant(hashBytes(bytes)===receipt.plaintextHash&&bytes.length===receipt.size,'integrity_failure','Stored bytes do not match receipt');return bytes;
  }
+ /** Trusted maintenance primitive: caller must hold the metadata project lock and prove no retained reference. */
+ async removeUnreferenced(scope:Scope,receipt:ObjectReceipt):Promise<boolean>{
+  scope={tenantId:scope.tenantId,projectId:scope.projectId};receipt={...receipt};
+  invariant(/^[a-f0-9]{64}\/[a-f0-9]{64}$/.test(receipt.key)&&receipt.key===`${digest(scope)}/${receipt.plaintextHash}`,'object_scope_denied','Invalid scoped object reference');
+  invariant(receipt.keyVersion===this.keyVersion,'key_unavailable','Object key version unavailable');
+  try{
+   invariant(!(await lstat(join(this.root,digest(scope)))).isSymbolicLink(),'unsafe_storage','Symlinked object directories forbidden');
+   const path=join(this.root,receipt.key);invariant(!(await lstat(path)).isSymbolicLink(),'unsafe_storage','Symlinked objects forbidden');
+   await unlink(path);return true;
+  }catch(error){if((error as NodeJS.ErrnoException).code==='ENOENT')return false;throw error;}
+ }
+
 }

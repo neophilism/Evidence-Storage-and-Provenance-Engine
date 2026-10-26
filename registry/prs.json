@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "repository": "neophilism/Evidence-Storage-and-Provenance-Engine",
-  "roadmapVersion": 2,
+  "roadmapVersion": 3,
   "planVerified": true,
-  "plannedPrCount": 2,
-  "observedAt": "2026-10-26T19:15:03Z",
+  "plannedPrCount": 3,
+  "observedAt": "2026-10-26T19:48:06Z",
   "units": [
     {
       "id": "ESP-001",
@@ -73,6 +73,44 @@
         },
         "live": "not_performed"
       }
+    },
+    {
+      "id": "ESP-003",
+      "title": "Authenticated evidence command facade and trusted scan worker",
+      "origin": "addition",
+      "prs": [
+        3
+      ],
+      "contributingPrs": [],
+      "dependsOn": [
+        "ESP-001",
+        "ESP-002"
+      ],
+      "externalDependencies": [],
+      "externalPrerequisites": [
+        "Identity SDK pinned to neophilism/Identity-Authorization-and-Policy-Engine@49822985616d00521ec6f425dcea5993953fb7a1"
+      ],
+      "scope": [
+        "Identity authenticated scoped commands and optimistic aggregate revisions",
+        "Atomic acquisition publication and durable upload intents",
+        "Generation-fenced trusted scan worker and clean authorized representations",
+        "Safe reference-checked orphan reconciliation"
+      ],
+      "acceptanceCriteria": "Real PGlite migration/restricted login and encrypted temporary objects exercise facade acquisition, scan/read isolation, stale/failing attempts, atomic idempotency and safe orphan cleanup. Synthetic scanner only in tests; real scanner and live acceptance separate.",
+      "implementationStatus": "implemented_foundation",
+      "validation": {
+        "local": "passed: Node 24.22.1; strict typecheck; 58 tests (19 facade); ESM/declaration build; compiled facade export smoke; canonical registry",
+        "ci": {
+          "status": "passed",
+          "commitSha": "070f2dd1f2287d04b0e2e29cb35b96b423db21fc",
+          "workflowRunIds": [
+            40389715695,
+            40389725032
+          ],
+          "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/actions/runs/40389725032"
+        },
+        "live": "not_performed"
+      }
     }
   ],
   "pullRequests": [
@@ -92,10 +130,22 @@
       "id": 5023092827,
       "number": 2,
       "title": "ESP-002: Add durable scoped evidence persistence",
-      "state": "open",
+      "state": "closed",
       "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/2",
       "createdAt": "2026-10-26T19:04:33Z",
-      "updatedAt": "2026-10-26T19:15:03Z",
+      "updatedAt": "2026-10-26T19:29:43Z",
+      "mergedAt": "2026-10-26T19:29:43Z",
+      "closedAt": "2026-10-26T19:29:43Z",
+      "draft": false
+    },
+    {
+      "id": 5023450111,
+      "number": 3,
+      "title": "ESP-003: Add authenticated evidence command facade and trusted scan worker",
+      "state": "open",
+      "url": "https://github.com/neophilism/Evidence-Storage-and-Provenance-Engine/pull/3",
+      "createdAt": "2026-10-26T19:32:00Z",
+      "updatedAt": "2026-10-26T19:48:06Z",
       "mergedAt": null,
       "closedAt": null,
       "draft": false
